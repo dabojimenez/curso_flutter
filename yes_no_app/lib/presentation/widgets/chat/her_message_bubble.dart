@@ -42,7 +42,17 @@ class _ImageBubble extends StatelessWidget {
         width: size.width * 0.7,
         height: 150,
         // fit: BoxFit.fill,
-        fit: BoxFit.cover, //
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+
+          return Container(
+            width: size.width * 0.7,
+            height: 150,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text('Enviando una imagen'),
+          );
+        },
       ),
     );
   }
