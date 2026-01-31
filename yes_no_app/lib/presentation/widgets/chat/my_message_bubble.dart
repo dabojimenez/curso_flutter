@@ -5,7 +5,6 @@ class MyMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // Theme.of(context): busca el thema dentro del contexto
     // colorScheme: es una propiedad del tema, que contiene los colores
     final colors = Theme.of(context).colorScheme;
@@ -17,16 +16,16 @@ class MyMessageBubble extends StatelessWidget {
           decoration: BoxDecoration(
             color: colors.primary,
             borderRadius: BorderRadius.circular(20),
-            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Text(
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, voluptas.',
+              'Laboris duis dolore',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
-        SizedBox(height: 10,)
+        SizedBox(height: 10),
       ],
     );
   }
