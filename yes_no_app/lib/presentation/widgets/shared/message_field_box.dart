@@ -5,7 +5,11 @@ class MessageFieldBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
+    // final colors = Theme.of(context).colorScheme;
+
+    // Elemento, el cual nos va a dar control sobre el input, al cual se va asociar
+    final textControll = TextEditingController();
+    final focusNode = FocusNode();
 
     final outlineInputBorder = UnderlineInputBorder(
       borderSide: const BorderSide(color: Colors.transparent),
@@ -14,26 +18,35 @@ class MessageFieldBox extends StatelessWidget {
 
     final inputDecoration = InputDecoration(
       filled: true,
-      fillColor: colors.surface,
-      hintText: 'Escribe un mensaje',
+      hintText: 'End your message with a "?"',
       focusedBorder: outlineInputBorder,
       enabledBorder: outlineInputBorder,
       suffixIcon: IconButton(
         icon: const Icon(Icons.send_outlined),
         onPressed: () {
-          print('Valor de la caja de texto');
+          final textValue = textControll.value.text;
+          print('Valor de la caja de texto: $textValue');
+          textControll.clear();
         },
       ),
     );
 
     return TextFormField(
+      // Para que cuando de fuera del texto, se desabilite o se oculte el texto
+      // onTapOutside: (event) {
+      //   focusNode.unfocus();
+      // },
+      focusNode: focusNode,
+      controller: textControll,
       decoration: inputDecoration,
       onFieldSubmitted: (value) {
         print('Submit value $value');
+        textControll.clear();
+        focusNode.requestFocus();
       },
-      onChanged: (value) {
-        print('Change: $value');
-      },
+      // onChanged: (value) {
+      //   print('Change: $value');
+      // },
     );
   }
 }
