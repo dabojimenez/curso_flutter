@@ -8,12 +8,8 @@ class GetYesNoAnswer {
   Future<Message> getAnswere() async {
     final response = await _dio.get('https://yes-no-wtf.vercel.app/api');
 
-    final yesNoModel = YesNoModel(response.data)
+    final yesNoModel = YesNoModel.fromJson(response.data);
 
-    return Message(
-      text: yesNoModel.answer,
-      fromWho: FromWho.hers,
-      imageUrl: yesNoModel.image,
-    );
+    return yesNoModel.toMessageEntity();
   }
 }
