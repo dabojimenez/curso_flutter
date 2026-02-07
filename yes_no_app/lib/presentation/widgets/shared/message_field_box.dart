@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MessageFieldBox extends StatelessWidget {
-  const MessageFieldBox({super.key});
+  // ValueChanged<String>: Por que vamos a emitir un valor, en este caso sra de tipo string
+  final ValueChanged<String> onValue;
+  const MessageFieldBox({super.key, required this.onValue});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class MessageFieldBox extends StatelessWidget {
         icon: const Icon(Icons.send_outlined),
         onPressed: () {
           final textValue = textControll.value.text;
-          print('Valor de la caja de texto: $textValue');
+          onValue(textValue);
           textControll.clear();
         },
       ),
@@ -40,7 +42,7 @@ class MessageFieldBox extends StatelessWidget {
       controller: textControll,
       decoration: inputDecoration,
       onFieldSubmitted: (value) {
-        print('Submit value $value');
+        onValue(value);
         textControll.clear();
         focusNode.requestFocus();
       },
