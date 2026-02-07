@@ -47,6 +47,7 @@ class _ChatView extends StatelessWidget {
             // Expanded: permite expandir al widget hijo, que el padre le de
             Expanded(
               child: ListView.builder(
+                controller: chatProvider.chatScrollController,
                 itemCount: chatProvider.messageList.length,
                 itemBuilder: (context, index) {
                   final message = chatProvider.messageList[index];
@@ -58,7 +59,10 @@ class _ChatView extends StatelessWidget {
             ),
             // Caja de texto
             MessageFieldBox(
-              onValue: (value) => chatProvider.sendMessage(value),
+              onValue: (value) {
+                if (value.trim().isEmpty) return;
+                chatProvider.sendMessage(value);
+              },
             ),
           ],
         ),
