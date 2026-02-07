@@ -42,5 +42,8 @@ class ChatProvider extends ChangeNotifier {
 
   Future<void> herReplay() async {
     final herMessage = await getYesNoAnswer.getAnswere();
+
+    messageList.add(herMessage);
+    notifyListeners();
   }
 }
