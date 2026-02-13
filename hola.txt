@@ -1,0 +1,2 @@
+COmsdo util para git, cuando quiero restablecer si algo borre o dañe en mi compo local
+git checkout -- 
