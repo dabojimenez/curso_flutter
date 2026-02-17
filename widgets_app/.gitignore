@@ -40,6 +40,17 @@ app.*.symbols
 app.*.map.json
 
 # Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+widgets_app/android/app/build/
+widgets_app/android/app/.externalNativeBuild/
+widgets_app/android/app/.cxx/
+widgets_app/android/app/debug/
+widgets_app/android/app/profile/
+widgets_app/android/app/release/
+
+# Local configuration file (sdk path, etc)
+widgets_app/android/local.properties
+
+# Built application files
+widgets_app/android/app/build/outputs/apk/debug/app-debug.apk
+widgets_app/android/app/build/outputs/apk/profile/app-profile.apk
+widgets_app/android/app/build/outputs/apk/release/app-release.apk
