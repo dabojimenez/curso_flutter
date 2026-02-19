@@ -22,7 +22,6 @@ class ButtonsScreen extends StatelessWidget {
 }
 
 class _ButtonsView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
@@ -71,6 +70,8 @@ class _ButtonsView extends StatelessWidget {
             ),
 
             // TODO: Custom button
+            CustomButton(),
+
             IconButton(onPressed: () {}, icon: const Icon(Icons.access_alarm)),
             IconButton(
               onPressed: () {},
@@ -81,6 +82,38 @@ class _ButtonsView extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  const CustomButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
+
+    //Material: podremos definir el splash screen
+    // ClipRRect: sirve para hacer boredes en general
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Material(
+        color: colors.primary,
+        // InkWell: es como gesturedetector , pero reacciona al splash screen del boton
+        child: InkWell(
+          onTap: () {
+            
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Text(
+              'Custom Button',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
         ),
       ),
     );
