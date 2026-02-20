@@ -32,7 +32,7 @@ class _ProgressView extends StatelessWidget {
           SizedBox(height: 20),
           Text('Circular progress indecator controlado'),
           SizedBox(height: 20),
-          _ControllerProgressIndicator(),
+          _ControllerProgressIndicator()
         ],
       ),
     );
@@ -40,11 +40,45 @@ class _ProgressView extends StatelessWidget {
 }
 
 class _ControllerProgressIndicator extends StatelessWidget {
+  const _ControllerProgressIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    // StreamBuilder: se construye en tiempo de ejecucion y esta asociado a un strem, que e sun flujo de informacion
+    // StreamBuilder: es un widget que nos permite escuchar un stream y reaccionar a los cambios en el
+    return StreamBuilder(
+      stream: Stream.periodic(
+        const Duration(seconds: 1),
+        (value) {
+          return ( value * 2 ) / 10; // 0.0, 0.2, 0.4, 0.6, 0.8, 1.0
+        },
+      ).takeWhile((value) => value <= 100),
+      builder: (context, snapshot) {
+        final progressValue = snapshot.data ?? 0.0;
+        return snapshot.hasData
+        ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                value: progressValue,
+                strokeWidth: 2,
+                backgroundColor: Colors.black45,
+              ),
+              const SizedBox(width: 20),
+              // : toma todo el espacio que el padre le da
+              Expanded(
+                child: LinearProgressIndicator(
+                  value: progressValue,
+                  backgroundColor: Colors.black45,
+                ),
+              ),
+            ],
+          ),
+        )
+        : const SizedBox.shrink();
+      }
     );
   }
 }
