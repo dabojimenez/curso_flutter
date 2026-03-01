@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -34,10 +35,38 @@ final slides = <SlideInfo>[
   ),
 ];
 
-class AppTutorialScreen extends StatelessWidget {
+class AppTutorialScreen extends StatefulWidget {
   static const String nameRoute = 'app_tutorial';
 
   const AppTutorialScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AppTutorialScreen> createState() => _AppTutorialScreenState();
+}
+
+class _AppTutorialScreenState extends State<AppTutorialScreen> {
+  final PageController pageViewController = PageController();
+  bool endReadched = false;
+
+  // Para el control de las paginas
+  @override
+  void initState() {
+    super.initState();
+    pageViewController.addListener(() {
+      final page = pageViewController.page ?? 0;
+      if (!endReadched && page >= (slides.length - 1.5)){
+        setState(() {
+          endReadched = true;
+        });
+      }
+    });
+  }
+
+  @override
+  dispose() {
+    pageViewController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +75,7 @@ class AppTutorialScreen extends StatelessWidget {
       body: Stack(
         children: [
           PageView(
+            controller: pageViewController,
             physics: const BouncingScrollPhysics(),
             children: slides
                 .map(
@@ -68,6 +98,21 @@ class AppTutorialScreen extends StatelessWidget {
               },
             ),
           ),
+          endReadched ?
+          Positioned(
+            bottom: 50,
+            right: 30,
+            child: FadeInRight(
+              from: 15, // que solo se mueva 15 unidades
+              delay: const Duration(seconds: 1), // demora 1 segundo en aparecer
+              child: FilledButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: const Text('Comenzar'),
+              ),
+            )
+          ) : SizedBox(),
         ],
       ),
     );
