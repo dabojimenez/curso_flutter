@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,6 +60,8 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
     if(!isMounted) return;
     setState(() {
     });
+
+    // TODO: MOVER SCROLL
   }
 
   void addFileImages(){
@@ -95,10 +98,17 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.arrow_back),
         onPressed: (){
           context.pop();
         },
+        child: isLoading 
+        ? FadeInRight(
+          child: SpinPerfect(
+            infinite: true,
+            child: const Icon(Icons.refresh_rounded),
+          ),
+        )
+        : FadeIn(child: const Icon(Icons.arrow_back)) 
       ),
     );
   }
