@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:widgets_app/config/menu/menu_items.dart';
 
 class SideMenu extends StatefulWidget {
-  const SideMenu({Key? key}) : super(key: key);
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  const SideMenu({
+    Key? key,
+    required this.scaffoldKey
+    }) : super(key: key);
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -23,6 +28,13 @@ class _SideMenuState extends State<SideMenu> {
         setState(() {
           navDrawerIndex = value;
         });
+
+        final menuItem = appMenuItems[value];
+        // context.go(menuItem.link); : no usa el stack, sino que mueve la ruta
+        context.push(menuItem.link);
+        // accedemos a la llave delstateful
+        // y usamos el metodo closeDrawer() para cerrar el drawer
+        widget.scaffoldKey.currentState?.closeDrawer();
       },
       children: [
         Padding(
@@ -44,7 +56,7 @@ class _SideMenuState extends State<SideMenu> {
           padding: const EdgeInsetsGeometry.fromLTRB(28, 16, 28, 10),
           child: Divider(), // Genera una linea de divicion
         ),
-        
+
         Padding(
           padding: const EdgeInsetsGeometry.fromLTRB(28, 16, 28, 10),
           child: Text('Mas opciones'),
