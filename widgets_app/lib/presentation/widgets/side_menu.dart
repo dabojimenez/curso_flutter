@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widgets_app/config/menu/menu_items.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({Key? key}) : super(key: key);
@@ -12,6 +13,9 @@ class _SideMenuState extends State<SideMenu> {
   int navDrawerIndex = 0;
   @override
   Widget build(BuildContext context) {
+    // viewPadding: nos permite saber si la pantalla tiene una notchi (es decir, si la pantalla tiene una barra de notificaciones)
+    final hasNotch = MediaQuery.of(context).viewPadding.top > 35;
+
     return NavigationDrawer(
       selectedIndex: navDrawerIndex,
       // Este metodo se ejecutara cada vez que se seleccione una opcion del menu
@@ -21,18 +25,39 @@ class _SideMenuState extends State<SideMenu> {
         });
       },
       children: [
-        NavigationDrawerDestination(
-          icon: Icon(Icons.add),
-          label: Text('Botones'),
+        Padding(
+          // uun pequeño arreglo, para los ios y androids
+          padding: EdgeInsetsGeometry.fromLTRB(20, hasNotch ? 10 : 25, 16, 10),
+          child: Text('Bienvenido: David !!!'),
         ),
-        NavigationDrawerDestination(
-          icon: Icon(Icons.add_shopping_cart),
-          label: Text('Botones'),
+
+        ...appMenuItems
+            .sublist(0, 3) // tendremos los primeros 3 elementos
+            .map(
+              (e) => NavigationDrawerDestination(
+                icon: Icon(e.icon),
+                label: Text(e.title),
+              ),
+            ),
+
+        Padding(
+          padding: const EdgeInsetsGeometry.fromLTRB(28, 16, 28, 10),
+          child: Divider(), // Genera una linea de divicion
         ),
-        NavigationDrawerDestination(
-          icon: Icon(Icons.qr_code),
-          label: Text('Botones'),
+        
+        Padding(
+          padding: const EdgeInsetsGeometry.fromLTRB(28, 16, 28, 10),
+          child: Text('Mas opciones'),
         ),
+
+        ...appMenuItems
+            .sublist(3) // tendremos los primeros 3 elementos
+            .map(
+              (e) => NavigationDrawerDestination(
+                icon: Icon(e.icon),
+                label: Text(e.title),
+              ),
+            ),
       ],
     );
   }
