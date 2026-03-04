@@ -2,26 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:widgets_app/config/router/app_router.dart';
 import 'package:widgets_app/config/theme/app_theme.dart';
+import 'package:widgets_app/presentation/providers/theme_provider.dart';
 
 void main() {
   runApp(
     // con esto ya sabra donde poder bsucar los providers que se vayan creando
-    ProviderScope(
-      child: MainApp()
-    )
+    ProviderScope(child: MainApp()),
     // const MainApp()
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool isDarkMode = ref.watch(isDarkModeProvider);
+    final int selectedIndexColor = ref.watch(selectedIndexColorProvider);
+
     return MaterialApp.router(
       title: 'Flutter widgets',
       routerConfig: appRouter,
-      theme: AppTheme(selectedColor: 4).getTheme(),
+      theme: AppTheme(
+        selectedColor: selectedIndexColor,
+        isDarkMode: isDarkMode,
+      ).getTheme(),
       debugShowCheckedModeBanner: false,
     );
   }

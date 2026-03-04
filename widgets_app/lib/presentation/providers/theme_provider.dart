@@ -5,3 +5,6 @@ final isDarkModeProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 // Listado de colores inmutable
 final colorListProvider = Provider((ref) => colorList);
+
+// un simple entero
+final selectedIndexColorProvider = StateProvider.autoDispose<int>((ref) => 0);

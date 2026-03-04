@@ -21,7 +21,7 @@ class ThemeScreen extends ConsumerWidget {
               isDarkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
             ),
             onPressed: () {
-              
+              ref.read(isDarkModeProvider.notifier).update( (state) => !state);
             },
           ),
         ],
@@ -38,7 +38,7 @@ class _ThemeChangerView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
+    final int selectedIndexColor = ref.watch(selectedIndexColorProvider);
     final List<Color> colors = ref.watch(colorListProvider);
 
     return ListView.builder(
@@ -53,9 +53,10 @@ class _ThemeChangerView extends ConsumerWidget {
           activeColor: color,
           value: index,
           //groupValue: el valor seleccionado
-          groupValue: 0,
+          groupValue: selectedIndexColor,
           onChanged: (value) {
             // TODO: Notificar el cambio
+            ref.read(selectedIndexColorProvider.notifier).state = index;
           },
         );
       },
