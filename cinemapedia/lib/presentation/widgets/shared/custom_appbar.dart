@@ -10,27 +10,19 @@ class CustomAppbar extends StatelessWidget {
 
     return SafeArea(
       bottom: false,
-      child: Container(
-        color: Colors.amber,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: SizedBox(
-            width: double.infinity, // todo el anchoq ue se pueda
-            child: Row(
-              children: [
-                Icon(Icons.movie_outlined, color: colors.primary),
-                const SizedBox(width: 5,),
-                Text('Cinemapedia', style: titleStyle,),
-                // Spacer: es como un espacio flexible que ocupa todo el espacio restante
-                Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    
-                  },
-                )
-              ],
-            ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: SizedBox(
+          width: double.infinity, // todo el anchoq ue se pueda
+          child: Row(
+            children: [
+              Icon(Icons.movie_outlined, color: colors.primary),
+              const SizedBox(width: 5),
+              Text('Cinemapedia', style: titleStyle),
+              // Spacer: es como un espacio flexible que ocupa todo el espacio restante
+              Spacer(),
+              IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+            ],
           ),
         ),
       ),
