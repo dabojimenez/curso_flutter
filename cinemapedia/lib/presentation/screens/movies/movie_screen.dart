@@ -36,6 +36,69 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
       );
     }
 
-    return Scaffold(appBar: AppBar(title: Text('MovieId: ${widget.movieId}')));
+    return Scaffold(
+      body: CustomScrollView(
+        physics: const ClampingScrollPhysics(),
+        slivers: [_CustomSliverAppBar(movie: movie)],
+      ),
+    );
+  }
+}
+
+class _CustomSliverAppBar extends StatelessWidget {
+  final Movie movie;
+  const _CustomSliverAppBar({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return SliverAppBar(
+      backgroundColor: Colors.black,
+      expandedHeight:
+          size.height * 0.67, // tomamos el 70% de la pantalla, en lo alto
+      foregroundColor: Colors.white,
+      // shadowColor: Colors.red,
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+        title: Text(
+          movie.title,
+          style: const TextStyle(fontSize: 20, color: Colors.white),
+          textAlign: TextAlign.start,
+        ),
+        background: Stack(
+          children: [
+            SizedBox.expand(
+              child: Image.network(movie.posterPath, fit: BoxFit.contain),
+            ),
+            // Uso de gradientes (parte inferior)
+            const SizedBox.expand(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.7, 1.0],
+                    colors: [Colors.transparent, Colors.black87],
+                  ),
+                ),
+              ),
+            ),
+
+            // Gradiente en la parte superior
+            const SizedBox.expand(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    stops: [0.0, 0.3],
+                    colors: [Colors.black87, Colors.transparent],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
