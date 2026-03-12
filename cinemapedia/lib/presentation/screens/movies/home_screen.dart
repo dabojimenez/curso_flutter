@@ -36,14 +36,15 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final bool initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
+
     // // aqui si es watch, por q necesitamso estar pendiente del estado
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final upComingMovies = ref.watch(upComingMoviesProvider);
     final moviesSlideShow = ref.watch(moviesSlideshowProvider);
-
-    return const FullScreenLoader();
 
     return CustomScrollView(
       // slivers: es un widget que trabaj directamente con el scrollview
