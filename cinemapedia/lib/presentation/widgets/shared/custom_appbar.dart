@@ -1,11 +1,14 @@
 import 'package:cinemapedia/presentation/delegates/search_movie_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomAppbar extends StatelessWidget {
+import '../../screens/providers/providers.dart';
+
+class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
 
@@ -25,11 +28,15 @@ class CustomAppbar extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () {
+                  final movieRepository = ref.read(movieRepositoryProvider);
                   // showSearch: muestra un buscador en pantalla completa
                   showSearch(
                     context: context,
                     // delegate: el encargado de manejar la logica del buscador y esta relacionado a la capa de presentacion
-                    delegate: SearchMovieDelegate(),
+                    delegate: SearchMovieDelegate(
+                      // Mandamos la referencia a la funcion
+                      searchMovies: movieRepository.searchMovies,
+                    ),
                   );
                 },
               ),
