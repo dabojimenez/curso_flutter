@@ -66,13 +66,56 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           itemCount: movies.length,
           itemBuilder: (context, index) {
             final movie = movies[index];
-            return ListTile(
-              title: Text(movie.title),
-              subtitle: Text(movie.originalTitle),
-            );
+            return _MovieItem(movie: movie);
           },
         );
       },
+    );
+  }
+}
+
+class _MovieItem extends StatelessWidget {
+  final Movie movie;
+  const _MovieItem({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Row(
+        children: [
+          // Imagen de la pelicula
+          SizedBox(
+            width: size.width * 0.2, // El 20 % del ancho de la pantalla
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                movie.posterPath,
+                loadingBuilder: (context, child, loadingProgress) =>
+                    FadeIn(child: child),
+              ),
+            ),
+          ),
+
+          // separacion
+          const SizedBox(width: 10),
+          // Descripcion
+          SizedBox(
+            width: size.width * 0.7,
+            child: Column(
+              children: [
+                Text(movie.title, style: textStyles.titleMedium),
+                (movie.overview.length > 100)
+                    ? Text('${movie.overview.substring(0, 100)}...')
+                    : Text(movie.overview),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
