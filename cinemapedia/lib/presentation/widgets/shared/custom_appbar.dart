@@ -40,6 +40,7 @@ class CustomAppbar extends ConsumerWidget {
                     context: context,
                     // delegate: el encargado de manejar la logica del buscador y esta relacionado a la capa de presentacion
                     delegate: SearchMovieDelegate(
+                      initialMovies: ref.read(searchMoviesProvider),
                       // Mandamos la referencia a la funcion
                       searchMovies: ref
                           .read(searchMoviesProvider.notifier)

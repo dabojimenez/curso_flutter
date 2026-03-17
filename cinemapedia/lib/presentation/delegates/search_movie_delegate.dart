@@ -11,12 +11,16 @@ typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // funcion que nos permitira hacer la busqueda de peliculas
   final SearchMoviesCallback searchMovies;
+  final List<Movie> initialMovies;
   // StreamController: nos permitira manejar el flujo de datos
   // broadcast: nos permitira que varios oyentes se suscriban al stream
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
   Timer? _debounceTimer;
 
-  SearchMovieDelegate({required this.searchMovies});
+  SearchMovieDelegate({
+    required this.searchMovies,
+    required this.initialMovies,
+  });
 
   void onQueryChanged(String query) {
     // limpiamos el timer si existe
@@ -24,11 +28,11 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
     // esperamos uns 500 milesimas de segundo, para esperar que el cliente no escriba
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      if (query.isEmpty) {
-        // si es vacio, retornamos peliculas vacias
-        debounceMovies.add([]);
-        return;
-      }
+      // if (query.isEmpty) {
+      //   // si es vacio, retornamos peliculas vacias
+      //   debounceMovies.add([]);
+      //   return;
+      // }
       // llamamos a la funcion de busqueda
       final movies = await searchMovies(query);
       // agregamos las peliculas al stream
@@ -93,7 +97,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       // future: searchMovies(query),
       //
       stream: debounceMovies.stream,
-      initialData: const [],
+      initialData: initialMovies,
       builder: (context, snapshot) {
         // ! print(snapshot.data);
         final movies = snapshot.data ?? [];
