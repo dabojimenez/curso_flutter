@@ -67,7 +67,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           itemCount: movies.length,
           itemBuilder: (context, index) {
             final movie = movies[index];
-            return _MovieItem(movie: movie);
+            return _MovieItem(movie: movie, onMovieSelected: close);
           },
         );
       },
@@ -77,60 +77,68 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
 class _MovieItem extends StatelessWidget {
   final Movie movie;
-  const _MovieItem({required this.movie});
+  final Function onMovieSelected;
+
+  const _MovieItem({required this.movie, required this.onMovieSelected});
 
   @override
   Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Row(
-        children: [
-          // Imagen de la pelicula
-          SizedBox(
-            width: size.width * 0.2, // El 20 % del ancho de la pantalla
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                movie.posterPath,
-                loadingBuilder: (context, child, loadingProgress) =>
-                    FadeIn(child: child),
+    return GestureDetector(
+      onTap: () {
+        // cerramos el delegate y regresamos la pelicula seleccionada
+        onMovieSelected(context, movie);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Row(
+          children: [
+            // Imagen de la pelicula
+            SizedBox(
+              width: size.width * 0.2, // El 20 % del ancho de la pantalla
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  movie.posterPath,
+                  loadingBuilder: (context, child, loadingProgress) =>
+                      FadeIn(child: child),
+                ),
               ),
             ),
-          ),
 
-          // separacion
-          const SizedBox(width: 10),
-          // Descripcion
-          SizedBox(
-            width: size.width * 0.7,
-            child: Column(
-              children: [
-                Text(movie.title, style: textStyles.titleMedium),
-                (movie.overview.length > 100)
-                    ? Text('${movie.overview.substring(0, 100)}...')
-                    : Text(movie.overview),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star_half_rounded,
-                      color: Colors.yellow.shade800,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      HumanFormats.number(movie.voteAverage, 1),
-                      style: textStyles.bodyMedium!.copyWith(
-                        color: Colors.yellow.shade900,
+            // separacion
+            const SizedBox(width: 10),
+            // Descripcion
+            SizedBox(
+              width: size.width * 0.7,
+              child: Column(
+                children: [
+                  Text(movie.title, style: textStyles.titleMedium),
+                  (movie.overview.length > 100)
+                      ? Text('${movie.overview.substring(0, 100)}...')
+                      : Text(movie.overview),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star_half_rounded,
+                        color: Colors.yellow.shade800,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 5),
+                      Text(
+                        HumanFormats.number(movie.voteAverage, 1),
+                        style: textStyles.bodyMedium!.copyWith(
+                          color: Colors.yellow.shade900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
