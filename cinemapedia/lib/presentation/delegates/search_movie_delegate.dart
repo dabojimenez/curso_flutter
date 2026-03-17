@@ -23,9 +23,21 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
 
     // esperamos uns 500 milesimas de segundo, para esperar que el cliente no escriba
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      // TODO: BUSCAR PELICULA Y EMITIR AL STREAM
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      if (query.isEmpty) {
+        // si es vacio, retornamos peliculas vacias
+        debounceMovies.add([]);
+        return;
+      }
+      // llamamos a la funcion de busqueda
+      final movies = await searchMovies(query);
+      // agregamos las peliculas al stream
+      debounceMovies.add(movies);
     });
+  }
+
+  void clearStreams() {
+    debounceMovies.close();
   }
 
   // para cambiar el placeholder de 'Search' a 'Buscar pelicula'
@@ -58,6 +70,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
+        clearStreams();
         // regresamos null, ya que no seleccionamos ninguna pelicula
         close(context, null);
       },
@@ -88,7 +101,13 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           itemCount: movies.length,
           itemBuilder: (context, index) {
             final movie = movies[index];
-            return _MovieItem(movie: movie, onMovieSelected: close);
+            return _MovieItem(
+              movie: movie,
+              onMovieSelected: (context, movie) {
+                clearStreams();
+                close(context, movie);
+              },
+            );
           },
         );
       },
