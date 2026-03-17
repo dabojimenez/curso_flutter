@@ -15,6 +15,8 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // StreamController: nos permitira manejar el flujo de datos
   // broadcast: nos permitira que varios oyentes se suscriban al stream
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
+  // StreamController para manejar el estado de carga
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
   Timer? _debounceTimer;
 
   SearchMovieDelegate({required this.searchMovies, required this.initialMovies})
@@ -24,6 +26,8 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       );
 
   void _onQueryChanged(String query) {
+    // agregamos true al stream para indicar que estamos cargando, tan pronto empiece a escribir
+    isLoadingStream.add(true);
     // limpiamos el timer si existe
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
 
@@ -40,11 +44,14 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       debounceMovies.add(movies);
       // esto hacemos, para que siempre tenga data y asi poder evitar el doble posteo, evitando llamar el fetch
       initialMovies = movies;
+      // agregamos false al stream para indicar que hemos terminado de cargar
+      isLoadingStream.add(false);
     });
   }
 
   void clearStreams() {
     debounceMovies.close();
+    isLoadingStream.close();
   }
 
   // // para cambiar el placeholder de 'Search' a 'Buscar pelicula'
@@ -55,18 +62,38 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      // if (query.isNotEmpty)
-      FadeIn(
-        animate: query.isNotEmpty,
-        duration: const Duration(milliseconds: 200),
-        child: IconButton(
-          onPressed: () {
-            //query: propiedad propia de SearchDelegate que contiene el texto que se esta escribiendo
-            // limpiamos el buscador o el query
-            query = '';
-          },
-          icon: const Icon(Icons.clear),
-        ),
+      StreamBuilder(
+        initialData: false,
+        stream: isLoadingStream.stream,
+        builder: (context, snapshot) {
+          if (snapshot.data ?? false) {
+            return SpinPerfect(
+              spins: 10,
+              infinite: true,
+              duration: const Duration(seconds: 4),
+              child: IconButton(
+                onPressed: () {
+                  //query: propiedad propia de SearchDelegate que contiene el texto que se esta escribiendo
+                  // limpiamos el buscador o el query
+                  query = '';
+                },
+                icon: const Icon(Icons.refresh_rounded),
+              ),
+            );
+          }
+          return FadeIn(
+            animate: query.isNotEmpty,
+            duration: const Duration(milliseconds: 200),
+            child: IconButton(
+              onPressed: () {
+                //query: propiedad propia de SearchDelegate que contiene el texto que se esta escribiendo
+                // limpiamos el buscador o el query
+                query = '';
+              },
+              icon: const Icon(Icons.clear),
+            ),
+          );
+        },
       ),
     ];
   }
