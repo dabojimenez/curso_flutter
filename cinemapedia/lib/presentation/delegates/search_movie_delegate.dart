@@ -11,18 +11,19 @@ typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // funcion que nos permitira hacer la busqueda de peliculas
   final SearchMoviesCallback searchMovies;
-  final List<Movie> initialMovies;
+  List<Movie> initialMovies;
   // StreamController: nos permitira manejar el flujo de datos
   // broadcast: nos permitira que varios oyentes se suscriban al stream
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
   Timer? _debounceTimer;
 
-  SearchMovieDelegate({
-    required this.searchMovies,
-    required this.initialMovies,
-  });
+  SearchMovieDelegate({required this.searchMovies, required this.initialMovies})
+    : super(
+        searchFieldLabel: 'Buscar pelicula',
+        textInputAction: TextInputAction.done,
+      );
 
-  void onQueryChanged(String query) {
+  void _onQueryChanged(String query) {
     // limpiamos el timer si existe
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
 
@@ -37,6 +38,8 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       final movies = await searchMovies(query);
       // agregamos las peliculas al stream
       debounceMovies.add(movies);
+      // esto hacemos, para que siempre tenga data y asi poder evitar el doble posteo, evitando llamar el fetch
+      initialMovies = movies;
     });
   }
 
@@ -44,9 +47,9 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     debounceMovies.close();
   }
 
-  // para cambiar el placeholder de 'Search' a 'Buscar pelicula'
-  @override
-  String get searchFieldLabel => 'Buscar pelicula';
+  // // para cambiar el placeholder de 'Search' a 'Buscar pelicula'
+  // @override
+  // String get searchFieldLabel => 'Buscar pelicula';
 
   // Nos pemrite cosntruir las acciones
   @override
@@ -84,13 +87,34 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // Nos permite cosntruir los resultados de la busqueda, al presionar enter
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('Build results');
+    return StreamBuilder(
+      initialData: initialMovies,
+      stream: debounceMovies.stream,
+      builder: (context, snapshot) {
+        final movies = snapshot.data ?? [];
+        return ListView.builder(
+          itemCount: movies.length,
+          itemBuilder: (context, index) {
+            final movie = movies[index];
+            return _MovieItem(
+              movie: movie,
+              onMovieSelected: (context, movie) {
+                clearStreams();
+                close(context, movie);
+              },
+            );
+          },
+        );
+      },
+    );
   }
+
+  Widget builtResultsAndSuggestions() {}
 
   // Nos permite cosntruir las sugerencias de la busqueda, mientras escribimos
   @override
   Widget buildSuggestions(BuildContext context) {
-    onQueryChanged(query);
+    _onQueryChanged(query);
 
     return StreamBuilder(
       // // ejecutamos basado en el query
