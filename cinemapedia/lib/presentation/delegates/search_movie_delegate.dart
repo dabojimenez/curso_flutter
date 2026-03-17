@@ -87,6 +87,10 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // Nos permite cosntruir los resultados de la busqueda, al presionar enter
   @override
   Widget buildResults(BuildContext context) {
+    return _buildResultsAndSuggestions();
+  }
+
+  Widget _buildResultsAndSuggestions() {
     return StreamBuilder(
       initialData: initialMovies,
       stream: debounceMovies.stream,
@@ -109,37 +113,12 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     );
   }
 
-  Widget builtResultsAndSuggestions() {}
-
   // Nos permite cosntruir las sugerencias de la busqueda, mientras escribimos
   @override
   Widget buildSuggestions(BuildContext context) {
     _onQueryChanged(query);
 
-    return StreamBuilder(
-      // // ejecutamos basado en el query
-      // future: searchMovies(query),
-      //
-      stream: debounceMovies.stream,
-      initialData: initialMovies,
-      builder: (context, snapshot) {
-        // ! print(snapshot.data);
-        final movies = snapshot.data ?? [];
-        return ListView.builder(
-          itemCount: movies.length,
-          itemBuilder: (context, index) {
-            final movie = movies[index];
-            return _MovieItem(
-              movie: movie,
-              onMovieSelected: (context, movie) {
-                clearStreams();
-                close(context, movie);
-              },
-            );
-          },
-        );
-      },
-    );
+    return _buildResultsAndSuggestions();
   }
 }
 
