@@ -30,9 +30,10 @@ class CustomAppbar extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () {
-                  final movieRepository = ref.read(movieRepositoryProvider);
+                  // final movieRepository = ref.read(movieRepositoryProvider);
                   // showSearch: muestra un buscador en pantalla completa
 
+                  // final searchNotifier = ref.read(searchMoviesProvider.notifier);
                   final searchQuery = ref.read(searchQueryProvider);
                   showSearch<Movie?>(
                     query: searchQuery,
@@ -40,12 +41,9 @@ class CustomAppbar extends ConsumerWidget {
                     // delegate: el encargado de manejar la logica del buscador y esta relacionado a la capa de presentacion
                     delegate: SearchMovieDelegate(
                       // Mandamos la referencia a la funcion
-                      searchMovies: (query) {
-                        ref
-                            .read(searchQueryProvider.notifier)
-                            .update((state) => query);
-                        return movieRepository.searchMovies(query);
-                      },
+                      searchMovies: ref
+                          .read(searchMoviesProvider.notifier)
+                          .searchMoviesByQuery,
                     ),
                   ).then((movie) {
                     if (movie == null) return;
