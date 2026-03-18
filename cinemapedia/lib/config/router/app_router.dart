@@ -1,4 +1,5 @@
 import 'package:cinemapedia/presentation/screens/movies/screens.dart';
+import 'package:cinemapedia/presentation/views/views.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
@@ -7,7 +8,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/',
       name: 'home',
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) => const HomeScreen(childView: HomeView()),
       // routes: son las rutas hijas
       routes: [
         GoRoute(
