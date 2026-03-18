@@ -10,8 +10,11 @@ final appRouter = GoRouter(
       name: 'home',
       builder: (context, state) {
         // Otenemos el index de la ruta
-        final pageIndex = state.pathParameters['page'] ?? '0';
-        return HomeScreen(pageIndex: int.parse(pageIndex));
+        int pageIndex = int.parse(state.pathParameters['page'] ?? '0');
+        if (pageIndex > 2 || pageIndex < 0) {
+          pageIndex = 0;
+        }
+        return HomeScreen(pageIndex: pageIndex);
       },
       // routes: son las rutas hijas
       routes: [
@@ -26,6 +29,13 @@ final appRouter = GoRouter(
           },
         ),
       ],
+    ),
+
+    // Aqui redirigimos la ruta inicial a la ruta home con el index 0
+    GoRoute(
+      path: '/',
+      // con _ o __ indicamos que no neceistamos el context y el state, respectivamente
+      redirect: (_, __) => '/home/0',
     ),
   ],
 );
