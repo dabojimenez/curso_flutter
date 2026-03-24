@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/presentation/screens/providers/movies/movie_info_provider.dart';
 import 'package:cinemapedia/presentation/screens/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,6 +67,16 @@ class _CustomSliverAppBar extends StatelessWidget {
       expandedHeight:
           size.height * 0.67, // tomamos el 70% de la pantalla, en lo alto
       foregroundColor: Colors.white,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.favorite_border_outlined,
+            color: Colors.red,
+            size: 30,
+          ),
+        ),
+      ],
       // shadowColor: Colors.red,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -111,6 +120,20 @@ class _CustomSliverAppBar extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     stops: [0.0, 0.3],
+                    colors: [Colors.black87, Colors.transparent],
+                  ),
+                ),
+              ),
+            ),
+
+            // Sombra del botón de favoritos
+            const SizedBox.expand(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    stops: [0.0, 0.4],
                     colors: [Colors.black87, Colors.transparent],
                   ),
                 ),
@@ -234,6 +257,28 @@ class _ActorsByMovie extends ConsumerWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _CustomGradient extends StatelessWidget {
+  const _CustomGradient({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // begin
+    // end
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            stops: [0.0, 0.4],
+            colors: [Colors.black87, Colors.transparent],
+          ),
+        ),
       ),
     );
   }
