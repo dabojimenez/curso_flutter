@@ -99,45 +99,63 @@ class _CustomSliverAppBar extends StatelessWidget {
                 },
               ),
             ),
-            // Uso de gradientes (parte inferior)
-            const SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.7, 1.0],
-                    colors: [Colors.transparent, Colors.black87],
-                  ),
-                ),
-              ),
+            // Uso de gradientes (parte inferior), al final del poster
+            // const SizedBox.expand(
+            //   child: DecoratedBox(
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         begin: Alignment.topCenter,
+            //         end: Alignment.bottomCenter,
+            //         stops: [0.7, 1.0],
+            //         colors: [Colors.transparent, Colors.black87],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const _CustomGradient(
+              begin: AlignmentGeometry.topCenter,
+              end: AlignmentGeometry.bottomCenter,
+              stops: [0.8, 1.0],
+              colors: [Colors.transparent, Colors.black38],
             ),
 
-            // Gradiente en la parte superior
-            const SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    stops: [0.0, 0.3],
-                    colors: [Colors.black87, Colors.transparent],
-                  ),
-                ),
-              ),
+            // Gradiente en la parte superior, para el boton de retorno
+            // const SizedBox.expand(
+            //   child: DecoratedBox(
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         begin: Alignment.topLeft,
+            //         stops: [0.0, 0.3],
+            //         colors: [Colors.black87, Colors.transparent],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const _CustomGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: [0.0, 0.2],
+              colors: [Colors.black87, Colors.transparent],
             ),
 
             // Sombra del botón de favoritos
-            const SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    stops: [0.0, 0.4],
-                    colors: [Colors.black87, Colors.transparent],
-                  ),
-                ),
-              ),
+            // const SizedBox.expand(
+            //   child: DecoratedBox(
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         begin: Alignment.topRight,
+            //         end: Alignment.bottomLeft,
+            //         stops: [0.0, 0.4],
+            //         colors: [Colors.black87, Colors.transparent],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const _CustomGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.7, 1.0],
+              colors: [Colors.transparent, Colors.black87],
             ),
           ],
         ),
@@ -263,20 +281,28 @@ class _ActorsByMovie extends ConsumerWidget {
 }
 
 class _CustomGradient extends StatelessWidget {
-  const _CustomGradient({super.key});
+  final AlignmentGeometry begin;
+  final AlignmentGeometry end;
+  final List<double> stops;
+  final List<Color> colors;
+
+  const _CustomGradient({
+    this.begin = Alignment.topCenter,
+    this.end = Alignment.bottomCenter,
+    required this.stops,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // begin
-    // end
     return SizedBox.expand(
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            stops: [0.0, 0.4],
-            colors: [Colors.black87, Colors.transparent],
+            begin: begin,
+            end: end,
+            stops: stops,
+            colors: colors,
           ),
         ),
       ),
