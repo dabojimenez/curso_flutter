@@ -36,7 +36,11 @@ class _FavoriteViewState extends ConsumerState<FavoriteView> {
       //     return ListTile(title: Text(movie.title));
       //   },
       // ),
-      body: MoviesMasonry(movies: myMovieList),
+      body: MoviesMasonry(
+        movies: myMovieList,
+        loadNextPage: () =>
+            ref.read(favoriteMoviesProvider.notifier).loadNextPage(),
+      ),
     );
   }
 }
