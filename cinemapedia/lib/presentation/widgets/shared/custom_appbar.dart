@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../screens/providers/providers.dart';
+import '../../providers/providers.dart';
 
 class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({Key? key}) : super(key: key);
