@@ -24,7 +24,7 @@ class MovieMovieDB {
   final String originalTitle;
   final String overview;
   final double popularity;
-  final String posterPath;
+  final String? posterPath;
   final DateTime? releaseDate;
   final String title;
   final bool video;
@@ -59,7 +59,7 @@ class MovieMovieDB {
     "original_title": originalTitle,
     "overview": overview,
     "popularity": popularity,
-    "poster_path": posterPath,
+    "poster_path": posterPath ?? '',
     "release_date":
         "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
     "title": title,
