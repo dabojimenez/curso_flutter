@@ -55,12 +55,12 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       backgroundColor: Colors.black,
@@ -69,12 +69,12 @@ class _CustomSliverAppBar extends StatelessWidget {
       foregroundColor: Colors.white,
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.favorite_border_outlined,
-            color: Colors.red,
-            size: 30,
-          ),
+          onPressed: () async {
+            ref
+                .read(favoriteMoviesProvider.notifier)
+                .toggleFavoriteMovie(movie);
+          },
+          icon: const Icon(Icons.favorite, color: Colors.red, size: 30),
         ),
       ],
       // shadowColor: Colors.red,
@@ -99,19 +99,7 @@ class _CustomSliverAppBar extends StatelessWidget {
                 },
               ),
             ),
-            // Uso de gradientes (parte inferior), al final del poster
-            // const SizedBox.expand(
-            //   child: DecoratedBox(
-            //     decoration: BoxDecoration(
-            //       gradient: LinearGradient(
-            //         begin: Alignment.topCenter,
-            //         end: Alignment.bottomCenter,
-            //         stops: [0.7, 1.0],
-            //         colors: [Colors.transparent, Colors.black87],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+
             const _CustomGradient(
               begin: AlignmentGeometry.topCenter,
               end: AlignmentGeometry.bottomCenter,
@@ -138,19 +126,6 @@ class _CustomSliverAppBar extends StatelessWidget {
               colors: [Colors.black87, Colors.transparent],
             ),
 
-            // Sombra del botón de favoritos
-            // const SizedBox.expand(
-            //   child: DecoratedBox(
-            //     decoration: BoxDecoration(
-            //       gradient: LinearGradient(
-            //         begin: Alignment.topRight,
-            //         end: Alignment.bottomLeft,
-            //         stops: [0.0, 0.4],
-            //         colors: [Colors.black87, Colors.transparent],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             const _CustomGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
