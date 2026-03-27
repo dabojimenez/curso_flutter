@@ -48,7 +48,6 @@ class _CubitCounterView extends StatelessWidget {
           // // buildWhen: nos permite construir unicamente CUANDO se cumpla una condición
           // buildWhen: (previous, current) => current.counter != previous.counter,
           builder: (context, state) {
-            print('cambiooooo');
             return Text('Counter value: ${state.counter}');
           },
         ),
