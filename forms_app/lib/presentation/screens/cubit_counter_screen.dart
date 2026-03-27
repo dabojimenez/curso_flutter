@@ -24,13 +24,16 @@ class _CubitCounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Escuamos los cambios que tiene el state
-    final counterState = context.watch<CounterCubit>().state;
+    // final counterState = context.watch<CounterCubit>().state;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Cubit counter: ${counterState.transactionCount} transacciones',
-        ),
+        // context.select: de esta forma, seleccionamos un bloc nada mas y no estar escuchando TODOOO los wifgets
+        title: context.select((CounterCubit value) {
+          return Text(
+            'Cubit counter: ${value.state.transactionCount} transacciones',
+          );
+        }),
         actions: [
           IconButton(
             onPressed: () {
@@ -45,6 +48,7 @@ class _CubitCounterView extends StatelessWidget {
           // // buildWhen: nos permite construir unicamente CUANDO se cumpla una condición
           // buildWhen: (previous, current) => current.counter != previous.counter,
           builder: (context, state) {
+            print('cambiooooo');
             return Text('Counter value: ${state.counter}');
           },
         ),

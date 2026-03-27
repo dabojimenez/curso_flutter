@@ -1,6 +1,6 @@
 part of 'counter_cubit.dart';
 
-class CounterState {
+class CounterState extends Equatable {
   final int counter;
   final int transactionCount;
 
@@ -13,4 +13,8 @@ class CounterState {
       transactionCount: transactionCount ?? this.transactionCount,
     );
   }
+
+  @override
+  // si el counter y transactioncounter son iguales, ya no se dibujaria,m y es una validacion importante no solo por lo cubits
+  List<Object> get props => [counter, transactionCount];
 }
