@@ -8,6 +8,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   CounterBloc() : super(CounterState()) {
     // pasamos la referencia
     on<CounterIncreased>(_onCounterIncreased);
+    on<CounterReset>(_onCounterReset);
   }
 
   void _onCounterIncreased(CounterIncreased event, Emitter<CounterState> emit) {
@@ -18,5 +19,9 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
         transactionCounter: state.transactionCounter + 1,
       ),
     );
+  }
+
+  void _onCounterReset(CounterReset event, Emitter<CounterState> emit) {
+    emit(state.copyWith(counter: 0));
   }
 }
