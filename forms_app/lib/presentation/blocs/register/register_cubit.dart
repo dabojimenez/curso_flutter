@@ -6,7 +6,9 @@ part 'register_state.dart';
 class RegisterCubit extends Cubit<RegisterFormState> {
   RegisterCubit() : super(RegisterFormState());
 
-  void onSumit() {}
+  void onSumit() {
+    print('Cubit sumit $state');
+  }
 
   void usernameChanged(String value) {
     emit(state.copyWith(username: value));
