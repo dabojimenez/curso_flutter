@@ -43,7 +43,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     emit(state.copyWith(email: value));
   }
 
-  void passwordChanged(String value) {
+  void passwordChanged(String? value) {
     final password = Password.dirty(value: value);
     emit(
       state.copyWith(

@@ -17,6 +17,16 @@ class Username extends FormzInput<String?, UsernameError> {
   // se llama cuando, el cmapo es alterado por el usuario
   const Username.dirty({String? value = ''}) : super.dirty(value);
 
+  // getter, par aobtener los mensajes de error
+  String? get errorMessage {
+    if (isValid || isPure) return null;
+
+    if (displayError == UsernameError.empty) return 'El campo es requerido';
+    if (displayError == UsernameError.length) return 'Mínimo 6 caracteres';
+
+    return null;
+  }
+
   // Override validator to handle validating a given input value.
   // validaciones a ejecutarse
   @override

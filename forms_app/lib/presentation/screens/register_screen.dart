@@ -69,9 +69,10 @@ class _RegisterForm extends StatelessWidget {
             //   if (value.length < 6) return 'Más de 6 letras';
             //   return null;
             // },
-            errorMessage: username.isPure || username.isValid
-                ? null
-                : 'Usuario no valido',
+            // errorMessage: username.isPure || username.isValid
+            //     ? null
+            //     : 'Usuario no valido',
+            errorMessage: username.errorMessage,
           ),
           const SizedBox(height: 20),
           CustomTextFormFiel(
@@ -94,16 +95,8 @@ class _RegisterForm extends StatelessWidget {
           CustomTextFormFiel(
             label: 'Contraseña',
             obscureText: true,
-            onChanged: (value) {
-              registerCubit.passwordChanged(value!);
-              // _formKey.currentState?.validate();
-            },
-            validator: (value) {
-              if (value == null || value.isEmpty) return 'Campo requerido';
-              if (value.trim().isEmpty) return 'Campo requerido';
-              if (value.length < 6) return 'Más de 6 letras';
-              return null;
-            },
+            onChanged: registerCubit.passwordChanged,
+            errorMessage: password.errorMessage,
           ),
           const SizedBox(height: 20),
           FilledButton.tonalIcon(
