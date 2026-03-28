@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:forms_app/infrastructure/inputs/password.dart';
 import 'package:formz/formz.dart';
 
 import '../../../infrastructure/inputs/inputs.dart';
@@ -11,10 +10,23 @@ class RegisterCubit extends Cubit<RegisterFormState> {
   RegisterCubit() : super(RegisterFormState());
 
   void onSumit() {
+    // onemos al formulario en un estado nuevo
+    emit(
+      state.copyWith(
+        formStatus: FormStatus.validating,
+        username: Username.dirty(value: state.username.value),
+        password: Password.dirty(value: state.password.value),
+        isValid: Formz.validate([
+          state.username,
+          state.password,
+          // TODO: state.email
+        ]),
+      ),
+    );
     print('Cubit sumit $state');
   }
 
-  void usernameChanged(String value) {
+  void usernameChanged(String? value) {
     // aqui creamos una nueva isntancia y con todas su validaciones
     final username = Username.dirty(value: value);
     // Formz.validate: al llamaro asi, pide el listado de data, de tipo forminput y llamada su cada validacion, para saber si es o no es valido
