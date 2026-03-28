@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:forms_app/infrastructure/inputs/password.dart';
 import 'package:formz/formz.dart';
 
 import '../../../infrastructure/inputs/inputs.dart';
@@ -18,7 +19,11 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     final username = Username.dirty(value: value);
     // Formz.validate: al llamaro asi, pide el listado de data, de tipo forminput y llamada su cada validacion, para saber si es o no es valido
     emit(
-      state.copyWith(username: username, isValid: Formz.validate([username])),
+      state.copyWith(
+        username: username,
+        // por q enviamos los demas campos ?, para que se validen y regrese si son o no  es valido el fomrulario
+        isValid: Formz.validate([username, state.password]),
+      ),
     );
   }
 
@@ -27,6 +32,12 @@ class RegisterCubit extends Cubit<RegisterFormState> {
   }
 
   void passwordChanged(String value) {
-    emit(state.copyWith(password: value));
+    final password = Password.dirty(value: value);
+    emit(
+      state.copyWith(
+        password: password,
+        isValid: Formz.validate([password, state.username]),
+      ),
+    );
   }
 }
