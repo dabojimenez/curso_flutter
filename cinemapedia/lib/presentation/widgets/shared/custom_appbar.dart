@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../screens/providers/providers.dart';
+import '../../providers/providers.dart';
 
 class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class CustomAppbar extends ConsumerWidget {
                     ),
                   ).then((movie) {
                     if (movie == null) return;
-                    context.push('/movie/${movie.id}');
+                    context.push('/home/0/movie/${movie.id}');
                   });
                 },
               ),

@@ -1,13 +1,64 @@
+import 'package:cinemapedia/presentation/providers/storage/favorite_movies_provider.dart';
+import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FavoriteView extends StatelessWidget {
+class FavoriteView extends ConsumerStatefulWidget {
   const FavoriteView({super.key});
 
   @override
+  ConsumerState<FavoriteView> createState() => _FavoriteViewState();
+}
+
+class _FavoriteViewState extends ConsumerState<FavoriteView> {
+  @override
+  void initState() {
+    ref.read(favoriteMoviesProvider.notifier).loadNextPage();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final favoritesMovies = ref.watch(favoriteMoviesProvider);
+    final myMovieList = favoritesMovies.values.toList();
+    final colorPrymary = Theme.of(context).colorScheme.primary;
+
+    if (myMovieList.isEmpty) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.favorite_border, size: 100, color: colorPrymary),
+              const Text(
+                'No tienes peliculas favoritas registradas aún.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Favoritos view')),
-      body: const Center(child: Text('Favoritos')),
+      // appBar: AppBar(title: const Text('Favoritos view')),
+      // body: ListView.builder(
+      //   itemCount: favoritesMovies.keys.length,
+      //   itemBuilder: (BuildContext context, int index) {
+      //     final movie = myMovieList[index];
+      //     return ListTile(title: Text(movie.title));
+      //   },
+      // ),
+      body: MoviesMasonry(
+        movies: myMovieList,
+        loadNextPage: () =>
+            ref.read(favoriteMoviesProvider.notifier).loadNextPage(),
+      ),
     );
   }
 }
