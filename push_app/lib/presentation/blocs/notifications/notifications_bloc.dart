@@ -17,6 +17,27 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     // Manejador de eventos
     on<NotificationStatusChanged>(_notificationStatusChange);
+
+    // // Aqui dejamos, en caso de que se desea cargar la solicitud de permisos, al iniciar la aplicacion
+    // requestPermission();
+
+    _initialStatusCheck();
+  }
+
+  void _initialStatusCheck() async {
+    final settings = await messaging.getNotificationSettings();
+    add(NotificationStatusChanged(settings.authorizationStatus));
+    _getFCMToken();
+  }
+
+  void _getFCMToken() async {
+    // final settings = await messaging.getNotificationSettings();
+    // si no esta autorizado, no hacer nada
+    if (state.status != AuthorizationStatus.authorized) return;
+    // if (settings.authorizationStatus != AuthorizationStatus.authorized) return;
+
+    final token = await messaging.getToken();
+    print('FCM Token: $token');
   }
 
   // Inicializa Firebase Cloud Messaging
@@ -31,6 +52,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     Emitter<NotificationsState> emit,
   ) {
     emit(state.copyWith(status: event.status));
+    _getFCMToken();
   }
 
   // Metodo que nos permitira obtener el permiso
