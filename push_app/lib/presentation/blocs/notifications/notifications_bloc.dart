@@ -20,8 +20,10 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     // // Aqui dejamos, en caso de que se desea cargar la solicitud de permisos, al iniciar la aplicacion
     // requestPermission();
-
     _initialStatusCheck();
+
+    // Escuchar mensajes en primer plano (listeener para notificaciones en foreground)
+    _onForegroundMessage();
   }
 
   void _initialStatusCheck() async {
@@ -38,6 +40,18 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     final token = await messaging.getToken();
     print('FCM Token: $token');
+  }
+
+  void _handleRemoteMessage(RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification == null) return;
+    print('Message also contained a notification: ${message.notification}');
+  }
+
+  void _onForegroundMessage() {
+    FirebaseMessaging.onMessage.listen(_handleRemoteMessage);
   }
 
   // Inicializa Firebase Cloud Messaging
