@@ -47,6 +47,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     print('Message data: ${message.data}');
 
     if (message.notification == null) return;
+    print('se recivio una notificacion en primer plano');
     print('Message also contained a notification: ${message.notification}');
   }
 
