@@ -14,6 +14,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     // on<NotificationsEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
+
+    // Manejador de eventos
+    on<NotificationStatusChanged>(_notificationStatusChange);
   }
 
   // Inicializa Firebase Cloud Messaging
@@ -21,6 +24,13 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+  }
+
+  void _notificationStatusChange(
+    NotificationStatusChanged event,
+    Emitter<NotificationsState> emit,
+  ) {
+    emit(state.copyWith(status: event.status));
   }
 
   // Metodo que nos permitira obtener el permiso
@@ -34,5 +44,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       provisional: false, // permiso provisional
       sound: true,
     );
+
+    add(NotificationStatusChanged(settings.authorizationStatus));
   }
 }
