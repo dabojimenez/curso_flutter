@@ -112,4 +112,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
+
+  // Metodo que nos servira para verificar si existe o no una notificacion pushh y regresa un PushMessage opcional
+  PushMessage? getMessageById(String messageId) {
+    final exist = state.notifications.any((msg) => msg.messageId == messageId);
+    if (!exist) return null;
+
+    return state.notifications.firstWhere((msg) => msg.messageId == messageId);
+  }
 }
