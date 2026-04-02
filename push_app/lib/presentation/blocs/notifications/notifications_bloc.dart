@@ -67,7 +67,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           ? message.notification!.android?.imageUrl
           : message.notification!.apple?.imageUrl,
     );
-    print(notification);
+    // TODO: Add de un nuevo evento # _onPushMessageRecived
   }
 
   void _onForegroundMessage() {
