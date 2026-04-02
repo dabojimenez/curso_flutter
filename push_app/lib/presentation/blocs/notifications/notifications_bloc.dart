@@ -15,20 +15,18 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  // TODO: AQUI PODRIAMOS HACER EL GUARDADO DE LA NOTIFICACION PUSH EN UNA BASE DE DATOS LOCAL, PARA LUEGO MOSTRARLA CUANDO EL USUARIO ABRA LA APLICACION
+  print('Handling a background message: ${message.messageId}');
 }
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationsBloc() : super(const NotificationsState()) {
-    // on<NotificationsEvent>((event, emit) {
-    //   // TODO: implement event handler
-    // });
-
     // Manejador de eventos
     on<NotificationStatusChanged>(_notificationStatusChange);
 
+    on<NotificationRecived>(_onPushMessageRecived);
     // // Aqui dejamos, en caso de que se desea cargar la solicitud de permisos, al iniciar la aplicacion
     // requestPermission();
     _initialStatusCheck();
@@ -67,7 +65,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           ? message.notification!.android?.imageUrl
           : message.notification!.apple?.imageUrl,
     );
-    // TODO: Add de un nuevo evento # _onPushMessageRecived
+    add(NotificationRecived(notification));
   }
 
   void _onForegroundMessage() {
@@ -87,6 +85,17 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   ) {
     emit(state.copyWith(status: event.status));
     _getFCMToken();
+  }
+
+  void _onPushMessageRecived(
+    NotificationRecived event,
+    Emitter<NotificationsState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        notifications: [event.pushMessage, ...state.notifications],
+      ),
+    );
   }
 
   // Metodo que nos permitira obtener el permiso
