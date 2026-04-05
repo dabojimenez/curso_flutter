@@ -18,7 +18,16 @@ void main() async {
   runApp(
     // MultiBlocProvider: permite proveer multiples blocs a la aplicacion, y en este caso, lo haremos con la notificacion
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => NotificationsBloc())],
+      providers: [
+        BlocProvider(
+          create: (_) => NotificationsBloc(
+            requestLocalNotificationPermissions: LocalNotifications
+                .requestPermissionLocalNotifications, // enviamos la referencia a la funcion para localnotifications
+            showLocalNotification: LocalNotifications
+                .showLocalNotification, // enviamos la referencia a la funcion para mostrar notificaciones locales
+          ),
+        ),
+      ],
       child: const MainApp(),
     ),
   );

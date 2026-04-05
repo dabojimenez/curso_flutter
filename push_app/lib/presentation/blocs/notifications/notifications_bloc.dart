@@ -23,7 +23,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationsBloc() : super(const NotificationsState()) {
+  final Future<void> Function()? requestLocalNotificationPermissions;
+  final void Function({
+    required int id,
+    required String? title,
+    required String? body,
+    required String? data,
+  })?
+  showLocalNotification;
+
+  NotificationsBloc({
+    this.requestLocalNotificationPermissions,
+    this.showLocalNotification,
+  }) : super(const NotificationsState()) {
     // Manejador de eventos
     on<NotificationStatusChanged>(_notificationStatusChange);
 
@@ -67,16 +79,15 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           : message.notification!.apple?.imageUrl,
     );
 
-    // Agregamos la notificacion recibida al estado, para luego mostrarla en la
-    // UI, y ademas, esto nos permite tener un historial de las notificaciones recibidas,
-    // aunque la aplicacion este cerrada, ya que el estado se mantiene aunque la aplicacion este cerrada, y
-    // ademas, nos permite mostrar las notificaciones recibidas en una pantalla de historial de notificaciones, por ejemplo.
-    LocalNotifications.showLocalNotification(
-      id: notification.messageId.hashCode,
-      title: notification.title,
-      body: notification.body,
-      data: notification.data.toString(),
-    );
+    // Validamos si la funcion fue enviada, y si se envia, se muestra la notificacion local
+    if (showLocalNotification != null) {
+      showLocalNotification!(
+        id: notification.messageId.hashCode,
+        title: notification.title,
+        body: notification.body,
+        data: notification.data.toString(),
+      );
+    }
 
     add(NotificationRecived(notification));
   }
@@ -125,7 +136,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     // No muy necesario, si ya usamo las pushnotifications
     // Solicitar permiso a las local notifications, para que el usuario pueda recibir notificaciones locales programadas, aunque no sean push notifications
-    await LocalNotifications.requestPermissionLocalNotifications();
+    if (requestLocalNotificationPermissions != null) {
+      await requestLocalNotificationPermissions!();
+    }
 
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
