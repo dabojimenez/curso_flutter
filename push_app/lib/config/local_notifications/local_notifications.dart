@@ -40,4 +40,38 @@ class LocalNotifications {
       // onDidReceiveBackgroundNotificationResponse:
     );
   }
+
+  static void showLocalNotification({
+    required int id,
+    required String? title,
+    required String? body,
+    required String? data,
+  }) {
+    const androidDetails = AndroidNotificationDetails(
+      'channelId',
+      'channelName',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound(
+        'notification',
+      ), // usamos el arhivo de sonido que agregamos en android/app/src/main/res/raw/notification.mp3
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    //
+    const notificationDetails = NotificationDetails(
+      android: androidDetails,
+      // TODO: IOS CONFIGURATION
+    );
+
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.show(
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: notificationDetails,
+      payload:
+          data, // el payload es la data que queremos enviar a la pantalla de detalles, para mostrarla en esa pantalla, o para hacer alguna logica con esa data, como por ejemplo, redirigir a una pantalla especifica, etc.
+    );
+  }
 }

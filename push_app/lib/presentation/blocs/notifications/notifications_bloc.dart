@@ -66,6 +66,18 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           ? message.notification!.android?.imageUrl
           : message.notification!.apple?.imageUrl,
     );
+
+    // Agregamos la notificacion recibida al estado, para luego mostrarla en la
+    // UI, y ademas, esto nos permite tener un historial de las notificaciones recibidas,
+    // aunque la aplicacion este cerrada, ya que el estado se mantiene aunque la aplicacion este cerrada, y
+    // ademas, nos permite mostrar las notificaciones recibidas en una pantalla de historial de notificaciones, por ejemplo.
+    LocalNotifications.showLocalNotification(
+      id: notification.messageId.hashCode,
+      title: notification.title,
+      body: notification.body,
+      data: notification.data.toString(),
+    );
+
     add(NotificationRecived(notification));
   }
 
