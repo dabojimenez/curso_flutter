@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:push_app/config/router/app_router.dart';
 
 class LocalNotifications {
   // Metodo para pedir permisos, de las local notifications
@@ -36,8 +37,7 @@ class LocalNotifications {
 
     await flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
-      // TODO
-      // onDidReceiveBackgroundNotificationResponse:
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     );
   }
 
@@ -73,5 +73,13 @@ class LocalNotifications {
       payload:
           data, // el payload es la data que queremos enviar a la pantalla de detalles, para mostrarla en esa pantalla, o para hacer alguna logica con esa data, como por ejemplo, redirigir a una pantalla especifica, etc.
     );
+  }
+
+  static void onDidReceiveNotificationResponse(NotificationResponse response) {
+    // Aqui podemos manejar las interacciones con las notificaciones, como por ejemplo, redirigir a una pantalla especifica cuando se hace click en la notificacion, o mostrar un dialogo, etc.
+    // print('Notification clicked with payload: ${response.payload}');
+    appRouter.push(
+      '/push-details/${response.payload}',
+    ); // redirigimos a la pantalla de detalles, y le enviamos el payload como parametro, para mostrar la informacion correspondiente en esa pantalla.
   }
 }
