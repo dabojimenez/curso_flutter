@@ -113,7 +113,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     // No muy necesario, si ya usamo las pushnotifications
     // Solicitar permiso a las local notifications, para que el usuario pueda recibir notificaciones locales programadas, aunque no sean push notifications
-    await requestPermissionLocalNotifications();
+    await LocalNotifications.requestPermissionLocalNotifications();
 
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
