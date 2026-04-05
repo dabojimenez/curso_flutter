@@ -11,9 +11,15 @@ plugins {
 android {
     namespace = "com.stalynjimenezdev.push_app"
     compileSdk = flutter.compileSdkVersion
+    // Para el uso de notificaiones locales programadas
+    // compileSdk = 33
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Para el uso de notificaiones locales programadas
+        // Flag to enable support for the new language APIs
+        isCoreLibraryDesugaringEnabled = true
+        // Sets Java compatibility to Java 17
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -31,6 +37,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Para el uso de notificaiones locales programadas
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -44,4 +52,8 @@ android {
 
 flutter {
     source = "../.."
+}
+// Para el uso de notificaiones locales programadas
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
