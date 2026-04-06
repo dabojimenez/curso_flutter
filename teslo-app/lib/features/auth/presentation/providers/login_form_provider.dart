@@ -5,28 +5,28 @@ import 'package:teslo_shop/features/shared/shared.dart';
 
 class LoginFormsState {
   final bool isPosting;
-  final bool ifFormPosted;
+  final bool isFormPosted;
   final bool isValid;
   final Email email;
   final Password password;
 
   LoginFormsState(
       {this.isPosting = false,
-      this.ifFormPosted = false,
+      this.isFormPosted = false,
       this.isValid = false,
       this.email = const Email.pure(),
       this.password = const Password.pure()});
 
   LoginFormsState copyWith({
     bool? isPosting,
-    bool? ifFormPosted,
+    bool? isFormPosted,
     bool? isValid,
     Email? email,
     Password? password,
   }) {
     return LoginFormsState(
       isPosting: isPosting ?? this.isPosting,
-      ifFormPosted: ifFormPosted ?? this.ifFormPosted,
+      isFormPosted: isFormPosted ?? this.isFormPosted,
       isValid: isValid ?? this.isValid,
       email: email ?? this.email,
       password: password ?? this.password,
@@ -36,7 +36,7 @@ class LoginFormsState {
   @override
   String toString() => '''
   isPosting: $isPosting
-  ifFormPosted: $ifFormPosted
+  isFormPosted: $isFormPosted
   isValid: $isValid
   email: $email
   password: $password
@@ -81,13 +81,13 @@ class LoginFormNotifier extends StateNotifier<LoginFormsState> {
       email: email,
       password: password,
       isValid: Formz.validate([email, password]),
-      ifFormPosted: true,
+      isFormPosted: true,
     );
   }
 }
 
 //! 3 - StateNotifierprovider - consume afuera
-final LoginFormProvider =
+final loginFormProvider =
     StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormsState>(
         (ref) {
   return LoginFormNotifier();
