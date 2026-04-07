@@ -14,14 +14,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
   AuthNotifier({required this.authRepository}) : super(AuthState());
 
-  void loginuser(String email, String password) async {
+  Future<void> loginuser(String email, String password) async {
     // solo para relantizar en localhost el proceso de login
     await Future.delayed(const Duration(milliseconds: 500));
 
     try {
       final user = await authRepository.login(email, password);
       _setLoggedUser(user);
-    } on WrongCredentials catch (e) {
+    } on WrongCredentials {
       logout('Credenciales incorrectas');
     } catch (e) {
       logout('Error no controlado');
