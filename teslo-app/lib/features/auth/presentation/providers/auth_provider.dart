@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:teslo_shop/features/auth/domain/domain.dart';
+import 'package:teslo_shop/features/auth/infrastructure/errors/auth_errors.dart';
 
 import '../../infrastructure/repositories/auth_repository_impl.dart';
 
@@ -14,11 +15,38 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier({required this.authRepository}) : super(AuthState());
 
   void loginuser(String email, String password) async {
-    // await authRepository.login(email, password);
-    // state =
+    // solo para relantizar en localhost el proceso de login
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    try {
+      final user = await authRepository.login(email, password);
+      _setLoggedUser(user);
+    } on WrongCredentials catch (e) {
+      logout('Credenciales incorrectas');
+    } catch (e) {
+      logout('Error no controlado');
+    }
   }
+
   void registerUser(String email, String password, String fullName) async {}
   void checkAuthStatus() async {}
+
+  void _setLoggedUser(User user) {
+    // TODO: necsito guardar el token fisicamente
+    state = state.copyWith(
+      authStatus: AuthStatus.authenticated,
+      user: user,
+    );
+  }
+
+  Future<void> logout([String? errorMessage]) async {
+    // TODO: limpiar token fisicamente
+    state = state.copyWith(
+      authStatus: AuthStatus.notAuthenticated,
+      user: null,
+      errorMessage: errorMessage,
+    );
+  }
 }
 
 enum AuthStatus {
