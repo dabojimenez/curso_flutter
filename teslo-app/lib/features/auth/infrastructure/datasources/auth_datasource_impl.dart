@@ -32,13 +32,15 @@ class AuthDatasourceImpl extends AuthDatasource {
 
       return user;
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) throw WrongCredentials();
+      if (e.response?.statusCode == 401){
+        throw CustomError(message: e.response?.data['message'] ?? 'Credenciales no validas');
+      }
       if (e.type == DioExceptionType.connectionTimeout) {
         throw ConnectionTimeout();
       }
-      throw CustomError(message: 'Algo salio mal', errorCode: 1);
+      throw CustomError(message: 'Algo salio mal');
     } catch (e) {
-      throw CustomError(message: 'Algo salio mal', errorCode: 1);
+      throw CustomError(message: 'Algo salio mal');
     }
   }
 
