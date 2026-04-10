@@ -7,6 +7,7 @@ class ConnectionTimeout implements Exception {}
 class CustomError implements Exception {
   final String message;
   // final int errorCode;
+  final bool loggedRequired; // para en caso de que queramos registarr un log
 
-  CustomError({required this.message});
+  CustomError(this.message, [this.loggedRequired = false]);
 }
