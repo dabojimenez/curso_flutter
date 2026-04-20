@@ -1,18 +1,28 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:teslo_shop/features/auth/domain/domain.dart';
 import 'package:teslo_shop/features/auth/infrastructure/errors/auth_errors.dart';
+import 'package:teslo_shop/features/shared/infrastructure/services/key_value_storage_service.dart';
+import 'package:teslo_shop/features/shared/infrastructure/services/key_value_storage_service_impl.dart';
 
 import '../../infrastructure/repositories/auth_repository_impl.dart';
 
 final authProvider =
     StateNotifierProvider.autoDispose<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
-  return AuthNotifier(authRepository: authRepository);
+  final keyValueStorageService = KeyValueStorageServiceImpl();
+  return AuthNotifier(
+    authRepository: authRepository,
+    keyValueStorageService: keyValueStorageService
+  );
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
-  AuthNotifier({required this.authRepository}) : super(AuthState());
+  final KeyValueStorageService keyValueStorageService;
+  AuthNotifier({
+    required this.authRepository,
+    required this.keyValueStorageService
+  }) : super(AuthState());
 
   Future<void> loginuser(String email, String password) async {
     // solo para relantizar en localhost el proceso de login
@@ -31,8 +41,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   void registerUser(String email, String password, String fullName) async {}
   void checkAuthStatus() async {}
 
-  void _setLoggedUser(User user) {
-    // TODO: necsito guardar el token fisicamente
+  void _setLoggedUser(User user) async {
+    await keyValueStorageService.setKeyValue('token', user.token);
     state = state.copyWith(
       authStatus: AuthStatus.authenticated,
       user: user,
@@ -41,7 +51,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout([String? errorMessage]) async {
-    // TODO: limpiar token fisicamente
+    await keyValueStorageService.removeKey('token');
     state = state.copyWith(
       authStatus: AuthStatus.notAuthenticated,
       user: null,
