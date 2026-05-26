@@ -19,10 +19,13 @@ final authProvider =
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
   final KeyValueStorageService keyValueStorageService;
+
   AuthNotifier({
     required this.authRepository,
     required this.keyValueStorageService
-  }) : super(AuthState());
+  }): super(AuthState()){
+    checkAuthStatus();
+  }
 
   Future<void> loginuser(String email, String password) async {
     // solo para relantizar en localhost el proceso de login
@@ -39,7 +42,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void registerUser(String email, String password, String fullName) async {}
-  void checkAuthStatus() async {}
+  void checkAuthStatus() async {
+    final token = await keyValueStorageService.getValue<String>('token');
+    if (token == null) return logout();
+
+    try {
+      final user = await authRepository.checkAuthStatus(token);
+      _setLoggedUser(user);
+    } catch (e) {
+      logout('Error no controlado');
+    }
+  }
 
   void _setLoggedUser(User user) async {
     await keyValueStorageService.setKeyValue('token', user.token);
